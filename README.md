@@ -1,70 +1,196 @@
-# Getting Started with Create React App
+# Web Programming Final Project
+---
+## structure
+### mainpage:
+- sign in / sign up
+- title toolbar
+- cover
+    - title
+    - sub
+    - start now [button]
+- usage, helpful messages
+- popular catgories / topics
+- footer: license, copyright
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### accouts:
+- admins: all
+- reviewers: review, upload, accept
+- normal users: upload, accept 
 
-## Available Scripts
+## page design
+### sign in
+- id [input type="text"]
+    - problem: can we merge id as email?
+- pwd [input type="text"]
+- sign in [button]
+- create account [button]
+    - problem: button or a/href?
+- forget password [button]
+    - problem: button or a/href?
+- keyboard inputs:
+    - id tab -> pwd
+    - pwd tab -> sign in focus
+    - enter -> sign in
 
-In the project directory, you can run:
+### sign up
+- realname [input type="text"]
+- nickname [input type="text"]
+- id [input type="text"]
+- email [input type="text"]
+- pwd [input type="text"]
+- pwd check [input type="text"]
+- account type [button type="radio"]
+    - reviewers [button]
+        - note: reviewers need certificates
+    - normal user [button]
+- sign up [button]
+- already had an account? [a/href]
 
-### `npm start`
+### Topic(after sign in)
+- toolbar
+    - logo
+    - topics
+    - upload ideas
+    - search bar
+    - message / notifications
+    - account
+- fav topics
+- recommended topics
+- popular topics
+- all topics
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Topic(before sign in)
+- toolbar
+    - logo
+    - search
+    - sign button
+    - tags
+- tag1
+    - cover
+    - intro
+- tag2
+    - cover
+    - intro
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Account Button on Toolbars (after sign in)
+- Avatar
+    - problem: avatars?
+        1. No avatar
+        2. Selectable
+        3. Imgur as DB
+- id [pure text]
+    - problem: or nickname?
+- settings
+    - same as sign up page
+    - **real name, id can not change**
+    - **add old pwd, new pwd, confirm new pwd**
+- my ideas
+- interested topics / my topics
+    - favorites [list] (with an add button)
+    - recent views
+        - every line with an add button
+        - add to favorites
+    - expertise [list] (with an add button)
+- projects ongoing
+- my reviews (reviewers only)
 
-### `npm test`
+### upload ideas
+- name
+- tag
+- plan
+- review method [radio button]
+- resources already had [optional]
+- resources needed [optional]
+- reference [optional]
+- expect time and money [optional]
+- upload project file [button] [optional]
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## programming structure
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### base
+- baseURL
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### "css template"
+- including toolbar and footer
+- middle is empty: add things in
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### mainpage
+- baseURL
+- sign in or not: using cookies
+- sign in: baseURL/signin
+- sign up: baseURL/signup
+- start now -> baseURL/signup
 
-### `npm run eject`
+### signin
+- baseURL/signin
+- clicking button "sign in":
+    - client send:
+    ```javascript
+    {
+        method: POST,
+        URL: baseURL/signin,
+        data: {
+            id: id,
+            pwd: hash(pwd)
+        },
+        cookie: cookie
+    }
+    ```
+    - server return:
+    ```javascript
+    if data in DB:
+        return {
+            cookie: <add some info, help>
+            redirecting to mainpage
+        }
+    else:
+        show "invalid id / pwd" underneath the login block
+    ```
+    - [bcrypt](https://github.com/kelektiv/node.bcrypt.js) to [encode pwd](https://ithelp.ithome.com.tw/articles/10196477)
+- clicking button "create account":
+    - redirecting: baseURL/signup
+- clicking button "forget password?":
+    - redirecting: baseURL/forgetpwd
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### signup
+- baseURL/signup
+- clicking button "sign up":
+    - remember to check if pwd is strong enough
+    - client send:
+    ```javascript
+    {
+        method: POST,
+        URL: baseURL/signup,
+        data: {
+            realname: realname,
+            nickname: nickname,
+            id: id,
+            email: email(?),
+            pwd: hash(pwd),
+            account_type: account_type
+        },
+        cookie: cookie
+    }
+    ```
+    - server return:
+    ```javascript
+    if data in DB:
+        return {
+            cookie: <add some info, help>
+            redirecting to mainpage
+        }
+    else:
+        show "invalid id / pwd" underneath the login block
+    ```
+    - [cookie with pureJS](https://www.fooish.com/javascript/cookie.html)
+    - [js-cookie module](https://github.com/js-cookie/js-cookie)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## nice ref
+- https://ithelp.ithome.com.tw/users/20107247/ironman/1312
+- do we need joi to certificate post?
+- do we need jwt(API Token) ?
+- do we need mocha to test?
+- ngrok: tmp deploy
+- do we need forever to stay server up?
