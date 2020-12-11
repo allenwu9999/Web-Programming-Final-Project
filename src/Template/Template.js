@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import React, { useState, useRef, useEffect } from 'react';
 
-import { Affix, Menu, Input } from 'antd';
+import { Layout, Affix, Menu, Input, Breadcrumb } from 'antd';
 import {
 		HomeOutlined,
 		BulbOutlined,
@@ -18,7 +18,7 @@ import {
 
 const { SubMenu } = Menu;
 const { Search } = Input;
-// or use import HeaderSearch from 'ant-design-pro/lib/HeaderSearch'; (?)
+const { Header, Content, Footer } = Layout;
 
 function Template() {
 
@@ -71,128 +71,157 @@ function Template() {
 	];
 
 	return (
-		<Affix offsetTop={0}>
-			<Menu mode="horizontal">
+		<Layout>
+			<Header style={
+				{ position: 'fixed', width: '100%', backgroundColor: '#FFFFFF' }
+			}
+			>
+				<Menu mode="horizontal" theme="light">
 
-				<Menu.Item
-					key="home"
-					icon={<HomeOutlined />}
-					style={{ float: 'left' }}
-				>
-					<a
-						href="https://ant.design"
-						target="_blank"
-						rel="noreferrer"
+					<Menu.Item
+						key="home"
+						icon={<HomeOutlined />}
+						style={{ float: 'left' }}
 					>
-						Home (antd)
-					</a>
-				</Menu.Item>
-
-				<SubMenu
-					key="user"
-					icon={<UserOutlined />}
-					style={{ float: 'right' }}
-					onTitleClick={e => console.log("user")}
-				>
-				{
-					UserOptions.map(option => (
-							<Menu.Item key={option.option} icon={option.icon}>
-								{option.option}
-							</Menu.Item>
-						)
-					)
-				}
-					<Menu.Divider />
-					<Menu.Item key="logout" icon={<ExportOutlined />}>
-						Logout
+						<a
+							href="https://ant.design"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Home (antd)
+						</a>
 					</Menu.Item>
-				</SubMenu>
 
-				<SubMenu
-					key="notifications"
-					icon={<BellOutlined />}
-					style={{ float: 'right' }}
-					onTitleClick={e => console.log("notifications")}
-				>
-				{
-					Notification.length ?
-					(
-						Notification.map(notification => (
+					<Menu.Item
+						key="about"
+						icon={<InfoCircleOutlined />}
+						style={{ float: 'left' }}
+					>
+						About Us
+					</Menu.Item>
+
+					<SubMenu
+						key="Topics"
+						title="Topics"
+						icon={<BulbOutlined />}
+						style={{ float: 'left' }}
+						onTitleClick={e => console.log("Topics")}
+					>
+					{
+						PopularTopics.map(subject => (
+								<Menu.ItemGroup title={subject.group}>
+								{
+									subject.items.map(subsubject => (
+											<Menu.Item key={subsubject}>
+												{subsubject}
+											</Menu.Item>
+										)
+									)
+								}
+								</Menu.ItemGroup>
+							)
+						)
+					}
+					</SubMenu>
+
+					<Menu.Item
+						key="upload"
+						icon={<UploadOutlined />}
+						style={{ float: 'left' }}
+					>
+						Upload Ideas
+					</Menu.Item>
+
+					<Menu.Item
+						key="review"
+						icon={<EyeOutlined />}
+						style={{ float: 'left' }}
+					>
+						Review Ideas
+					</Menu.Item>
+
+					<SubMenu
+						key="user"
+						icon={<UserOutlined />}
+						style={{ float: 'right' }}
+						onTitleClick={e => console.log("user")}
+					>
+					{
+						UserOptions.map(option => (
 								<Menu.Item
-									key={notification.text}
-									icon={notification.icon}
+									key={option.option}
+									icon={option.icon}
 								>
-									{notification.text}
+									{option.option}
 								</Menu.Item>
 							)
 						)
-					) :
-					(
-						<Menu.ItemGroup
-							title="No Notifications!"
-						/>
-					)
-				}
-				</SubMenu>
+					}
+						<Menu.Divider />
+						<Menu.Item key="logout" icon={<ExportOutlined />}>
+							Logout
+						</Menu.Item>
+					</SubMenu>
 
-				<Search
-					placeholder="search topics..."
-					allowClear
-					onSearch={() => console.log("Search")}
-					enterButton
-					style={{ width: 300, margin: 8, float: 'right'}}
-				/>
-
-				<Menu.Item
-					key="review"
-					icon={<EyeOutlined />}
-					style={{ float: 'right' }}
-				>
-					Review Ideas
-				</Menu.Item>
-
-				<Menu.Item
-					key="upload"
-					icon={<UploadOutlined />}
-					style={{ float: 'right' }}
-				>
-					Upload Ideas
-				</Menu.Item>
-
-				<SubMenu
-					key="Topics"
-					title="Topics"
-					icon={<BulbOutlined />}
-					style={{ float: 'right' }}
-					onTitleClick={e => console.log("Topics")}
-				>
-				{
-					PopularTopics.map(subject => (
-							<Menu.ItemGroup title={subject.group}>
-							{
-								subject.items.map(subsubject => (
-										<Menu.Item key={subsubject}>
-											{subsubject}
-										</Menu.Item>
-									)
+					<SubMenu
+						key="notifications"
+						icon={<BellOutlined />}
+						style={{ float: 'right' }}
+						onTitleClick={e => console.log("notifications")}
+					>
+					{
+						Notification.length ?
+						(
+							Notification.map(notification => (
+									<Menu.Item
+										key={notification.text}
+										icon={notification.icon}
+									>
+										{notification.text}
+									</Menu.Item>
 								)
-							}
-							</Menu.ItemGroup>
+							)
+						) :
+						(
+							<Menu.ItemGroup
+								title="No Notifications!"
+							/>
 						)
-					)
-				}
-				</SubMenu>
+					}
+					</SubMenu>
 
-				<Menu.Item
-					key="about"
-					icon={<InfoCircleOutlined />}
-					style={{ float: 'right' }}
-				>
-					About Us
-				</Menu.Item>
+					<Search
+						placeholder="search topics..."
+						allowClear
+						onSearch={() => console.log("Search")}
+						enterButton
+						style={
+							{
+								margin: 16,
+								width: 300,
+								float: 'right'
+							}
+						}
+					/>
 
-			</Menu>
-		</Affix>
+				</Menu>
+			</Header>
+			
+			<Content style={{ padding: '0 50px', marginTop: 64 }}>
+				<Breadcrumb style={{ marginTop: '16px' }}>
+					<Breadcrumb.Item>Home</Breadcrumb.Item>
+					<Breadcrumb.Item>List</Breadcrumb.Item>
+					<Breadcrumb.Item>App</Breadcrumb.Item>
+				</Breadcrumb>
+				<div style={{ padding: 24, minHeight: 500 }}>
+					Content
+				</div>
+			</Content>
+
+			<Footer style={{ textAlign: 'center' }}>
+				Ant Design ©2018 Created by Ant UED
+			</Footer>
+		</Layout>
 	);
 }
 
