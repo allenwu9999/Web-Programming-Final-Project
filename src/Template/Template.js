@@ -9,7 +9,11 @@ import {
 		BellOutlined,
 		UserOutlined,
 		SettingFilled,
-		InfoCircleOutlined
+		InfoCircleOutlined,
+		ExportOutlined,
+		BookOutlined,
+		ProjectFilled,
+		EyeOutlined
 	} from '@ant-design/icons';
 
 const { SubMenu } = Menu;
@@ -17,6 +21,55 @@ const { Search } = Input;
 // or use import HeaderSearch from 'ant-design-pro/lib/HeaderSearch'; (?)
 
 function Template() {
+
+	const PopularTopics = [
+		{
+			group: 'Physics',
+			items: [
+				'Astrophysics',
+				'Acoustics',
+				'Atmospheric Physics'
+			]
+		},
+		{
+			group: 'Chemistry',
+			items: [
+				'Atmospheric Chemistry',
+				'Chemical Engineering'
+			]
+		}
+	];
+
+	const UserOptions = [
+		{
+			option: 'My Home Page',
+			icon: <HomeOutlined />
+		},
+		{
+			option: 'Settings',
+			icon: <SettingFilled />
+		},
+		{
+			option: 'My Ideas',
+			icon: <BulbOutlined />
+		},
+		{
+			option: 'interested Topics',
+			icon: <BookOutlined />
+		},
+		{
+			option: 'Ongoing Projects',
+			icon: <ProjectFilled />
+		},
+		{
+			option: 'My Reviews',
+			icon: <EyeOutlined />
+		}
+	];
+
+	const Notification = [
+	];
+
 	return (
 		<Affix offsetTop={0}>
 			<Menu mode="horizontal">
@@ -35,65 +88,108 @@ function Template() {
 					</a>
 				</Menu.Item>
 
-				<Menu.Item
-					key="about"
-					icon={<InfoCircleOutlined />}
-					style={{ float: 'left' }}
-				>
-					About Us
-				</Menu.Item>
-
-				<SubMenu
-					key="Topics"
-					title="Topics"
-					icon={<BulbOutlined />}
-					style={{ float: 'left' }}
-				>
-					<Menu.ItemGroup title="Item 1">
-						<Menu.Item key="setting:1">
-							Option 1
-						</Menu.Item>
-						<Menu.Item key="setting:2">
-							Option 2
-						</Menu.Item>
-					</Menu.ItemGroup>
-					<Menu.ItemGroup title="Item 2">
-						<Menu.Item key="setting:3">Option 3</Menu.Item>
-						<Menu.Item key="setting:4">Option 4</Menu.Item>
-					</Menu.ItemGroup>
-				</SubMenu>
-
-				<Menu.Item
-					key="upload"
-					icon={<UploadOutlined />}
-					style={{ float: 'left' }}
-				>
-					Upload Ideas
-				</Menu.Item>
-
 				<SubMenu
 					key="user"
 					icon={<UserOutlined />}
 					style={{ float: 'right' }}
+					onTitleClick={e => console.log("user")}
 				>
-					<Menu.Item key="settings" icon={<SettingFilled />}>
-						Settings
+				{
+					UserOptions.map(option => (
+							<Menu.Item key={option.option} icon={option.icon}>
+								{option.option}
+							</Menu.Item>
+						)
+					)
+				}
+					<Menu.Divider />
+					<Menu.Item key="logout" icon={<ExportOutlined />}>
+						Logout
 					</Menu.Item>
 				</SubMenu>
 
-				<Menu.Item
+				<SubMenu
 					key="notifications"
 					icon={<BellOutlined />}
 					style={{ float: 'right' }}
-				/>
+					onTitleClick={e => console.log("notifications")}
+				>
+				{
+					Notification.length ?
+					(
+						Notification.map(notification => (
+								<Menu.Item
+									key={notification.text}
+									icon={notification.icon}
+								>
+									{notification.text}
+								</Menu.Item>
+							)
+						)
+					) :
+					(
+						<Menu.ItemGroup
+							title="No Notifications!"
+						/>
+					)
+				}
+				</SubMenu>
 
 				<Search
 					placeholder="search topics..."
 					allowClear
 					onSearch={() => console.log("Search")}
 					enterButton
-					style={{ width: 200, margin: 8, float: 'right'}}
+					style={{ width: 300, margin: 8, float: 'right'}}
 				/>
+
+				<Menu.Item
+					key="review"
+					icon={<EyeOutlined />}
+					style={{ float: 'right' }}
+				>
+					Review Ideas
+				</Menu.Item>
+
+				<Menu.Item
+					key="upload"
+					icon={<UploadOutlined />}
+					style={{ float: 'right' }}
+				>
+					Upload Ideas
+				</Menu.Item>
+
+				<SubMenu
+					key="Topics"
+					title="Topics"
+					icon={<BulbOutlined />}
+					style={{ float: 'right' }}
+					onTitleClick={e => console.log("Topics")}
+				>
+				{
+					PopularTopics.map(subject => (
+							<Menu.ItemGroup title={subject.group}>
+							{
+								subject.items.map(subsubject => (
+										<Menu.Item key={subsubject}>
+											{subsubject}
+										</Menu.Item>
+									)
+								)
+							}
+							</Menu.ItemGroup>
+						)
+					)
+				}
+				</SubMenu>
+
+				<Menu.Item
+					key="about"
+					icon={<InfoCircleOutlined />}
+					style={{ float: 'right' }}
+				>
+					About Us
+				</Menu.Item>
 
 			</Menu>
 		</Affix>
