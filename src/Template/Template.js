@@ -72,9 +72,11 @@ function Template() {
 
 	return (
 		<Layout>
-			<Header style={
-				{ position: 'fixed', width: '100%', backgroundColor: '#FFFFFF' }
-			}
+			<Header style={{
+				position: 'fixed',
+				width: '100%',
+				backgroundColor: '#FFFFFF'
+			}}
 			>
 				<Menu mode="horizontal" theme="light">
 
@@ -207,7 +209,10 @@ function Template() {
 				</Menu>
 			</Header>
 			
-			<Content style={{ padding: '0 50px', marginTop: 64 }}>
+			<Content style={{
+				padding: '0 50px',
+				marginTop: 64
+			}}>
 				<Breadcrumb style={{ marginTop: '16px' }}>
 					<Breadcrumb.Item>Home</Breadcrumb.Item>
 					<Breadcrumb.Item>List</Breadcrumb.Item>
@@ -218,8 +223,17 @@ function Template() {
 				</div>
 			</Content>
 
-			<Footer style={{ textAlign: 'center' }}>
-				Ant Design ©2018 Created by Ant UED
+			<Footer style={{
+				textAlign: 'center',
+				backgroundColor: '#000000',
+				color: '#FFFFFF'
+			}}>
+				Ideas Republica <span style={{
+					display: 'inline-block',
+					transform: 'rotateY(180deg)'
+				}}>
+					&copy;
+				</span> 2020
 			</Footer>
 		</Layout>
 	);
