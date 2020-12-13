@@ -1,12 +1,17 @@
-// import logo from './logo.svg';
 import './App.css';
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import Template from './Template/Template'
+import Template from './Template/Template';
+import Home from './Home/Home';
 
 function App() {
 	return (
-		<Template />
+		<BrowserRouter>
+			<Switch>
+				<Route exact path="/" component={Home} />
+			</Switch>
+		</BrowserRouter>
 	);
 }
 
