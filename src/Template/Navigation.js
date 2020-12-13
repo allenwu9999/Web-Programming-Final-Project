@@ -1,5 +1,6 @@
 import 'antd/dist/antd.css';
 import React, { Fragment } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import { Menu, Input } from 'antd';
 import {
@@ -20,6 +21,8 @@ const { Search } = Input;
 const { SubMenu } = Menu;
 
 function Navigation(props) {
+	let history = useHistory();
+
 	// popular topics should be called from db
 	const PopularTopics = [
 		{
@@ -76,13 +79,9 @@ function Navigation(props) {
 				icon={<HomeOutlined />}
 				style={{ float: 'left' }}
 			>
-				<a
-					href="https://ant.design"
-					target="_blank"
-					rel="noreferrer"
-				>
-					Home (antd)
-				</a>
+				<NavLink to="/" rel="noreferrer">
+					Home
+				</NavLink>
 			</Menu.Item>
 
 			<Menu.Item
@@ -90,7 +89,9 @@ function Navigation(props) {
 				icon={<InfoCircleOutlined />}
 				style={{ float: 'left' }}
 			>
-				About Us
+				<NavLink to="/about" rel="noreferrer">
+					About
+				</NavLink>
 			</Menu.Item>
 
 			<SubMenu
@@ -98,7 +99,7 @@ function Navigation(props) {
 				title="Topics"
 				icon={<BulbOutlined />}
 				style={{ float: 'left' }}
-				onTitleClick={e => console.log("Topics")}
+				onTitleClick={e => history.push('/topics')}
 			>
 			{
 				PopularTopics.map(subject => (
@@ -122,7 +123,9 @@ function Navigation(props) {
 				icon={<UploadOutlined />}
 				style={{ float: 'left' }}
 			>
-				Upload Ideas
+				<NavLink to="/upload" rel="noreferrer">
+					Upload Ideas
+				</NavLink>
 			</Menu.Item>
 
 			<Menu.Item
@@ -130,7 +133,9 @@ function Navigation(props) {
 				icon={<EyeOutlined />}
 				style={{ float: 'left' }}
 			>
-				Review Ideas
+				<NavLink to="/review" rel="noreferrer">
+					Review Ideas
+				</NavLink>
 			</Menu.Item>
 
 			{
