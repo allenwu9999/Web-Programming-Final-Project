@@ -194,5 +194,42 @@
 - do we need mocha to test?
 - ngrok: tmp deploy
 - do we need forever to stay server up?
+---
+## Database
+### User
+* accout type(int)
+* info(json)
+    * real name(str)
+    * nickname(str)
+    * id(str)
+    * pwd(str)
+    * email(str)
+    * avatar(imgur http)
+    * region(str)
+    * expertise(str)
+* login state
+* ideas
+* interested topics
+* ongoing projects
+* ideas to be reviewed
+
+### Ideas
+* topics
+* subtopics
+* content
+* creater
+    * nickname@id
+* accepters
+    * nickname@id
+* tags
+* idea id(auto)
+
+### Topics
+* popular topics
+* suptopic
+    * topic
+    * score
+
+### Projects(optional)
 
 ###### tags: `Ideas Republica`, `Web Programming 2020`
