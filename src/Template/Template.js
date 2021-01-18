@@ -25,7 +25,7 @@ function Template(props) {
       >
         {
           <Navigation
-            loggined={false}
+            loggined={true}
             reviewer={true}
             notifications={Notifications}
           />
@@ -49,7 +49,7 @@ function Template(props) {
           textAlign: "center",
           backgroundColor: "#000000",
           color: "#FFFFFF",
-          height: 64
+          height: 64,
         }}
       >
         Ideas Republica{" "}

@@ -10,6 +10,11 @@ import Upload from "./Upload/Upload";
 import Review from "./Review/Review";
 import SignIn from "./SignIn/SignIn";
 import SignUp from "./SignUp/SignUp";
+import Homepage from "./UserInfo/Homepage/Homepage";
+import Settings from "./UserInfo/Settings/Settings";
+import MyIdeas from "./UserInfo/Ideas/MyIdeas";
+import MyProjects from "./UserInfo/Projects/MyProjects";
+import MyTopics from "./UserInfo/Topics/MyTopics";
 
 function App() {
   return (
@@ -23,6 +28,11 @@ function App() {
         <Route exact path="/search" component={Home} />
         <Route exact path="/sign-in" component={SignIn} />
         <Route exact path="/sign-up" component={SignUp} />
+        <Route exact path="/my-home" component={Homepage} />
+        <Route exact path="/my-settings" component={Settings} />
+        <Route exact path="/my-ideas" component={MyIdeas} />
+        <Route exact path="/my-interested-topics" component={MyTopics} />
+        <Route exact path="/my-projects" component={MyProjects} />
 
         <Redirect from="/home" to="/" />
       </Switch>
