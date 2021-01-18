@@ -39,7 +39,7 @@ function Template(props) {
           background: "#E0E0E0",
         }}
       >
-        <div style={{ padding: 24, minHeight: window.innerHeight - 64 }}>
+        <div style={{ padding: 24, minHeight: window.innerHeight - 128 }}>
           {props.content}
         </div>
       </Content>
@@ -49,6 +49,7 @@ function Template(props) {
           textAlign: "center",
           backgroundColor: "#000000",
           color: "#FFFFFF",
+          height: 64
         }}
       >
         Ideas Republica{" "}
