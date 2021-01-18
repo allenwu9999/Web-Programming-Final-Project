@@ -39,22 +39,27 @@ function Navigation(props) {
     {
       option: "My Home Page",
       icon: <HomeOutlined />,
+      link: "./my-home",
     },
     {
       option: "Settings",
       icon: <SettingFilled />,
+      link: "./my-settings",
     },
     {
       option: "My Ideas",
       icon: <BulbOutlined />,
+      link: "./my-ideas",
     },
     {
       option: "interested Topics",
       icon: <BookOutlined />,
+      link: "my-interested-topics",
     },
     {
       option: "Ongoing Projects",
       icon: <ProjectFilled />,
+      link: "./my-projects",
     },
   ];
   if (props.revierer)
@@ -124,7 +129,9 @@ function Navigation(props) {
           >
             {UserOptions.map((option) => (
               <Menu.Item key={option.option} icon={option.icon}>
-                {option.option}
+                <NavLink to={option.link} rel="noreferrer">
+                  {option.option}
+                </NavLink>
               </Menu.Item>
             ))}
             <Menu.Divider />
