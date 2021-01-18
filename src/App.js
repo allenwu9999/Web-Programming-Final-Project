@@ -23,6 +23,8 @@ function App() {
         <Route exact path="/search" component={Home} />
         <Route exact path="/sign-in" component={SignIn} />
         <Route exact path="/sign-up" component={SignUp} />
+        <Route exact path="/topic" component={Home} />
+        <Route exact path="/subtopic" component={Home} />
 
         <Redirect from="/home" to="/" />
       </Switch>
