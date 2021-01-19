@@ -4,6 +4,10 @@ import { NavLink, useHistory } from "react-router-dom";
 
 import Template from '../Template/Template';
 
+import { Menu } from "antd";
+
+const { SubMenu } = Menu;
+
 function Idea(props){
 	const { id } = props.match.params;
 	const target_idea = {
@@ -20,9 +24,11 @@ function Idea(props){
 
 	return (
 		<Template content={
-			<div>
-				{id}
-			</div>
+			<Menu mode="vertical" theme="light">
+				<Menu.Item key="home">
+					Home
+				</Menu.Item>
+			</Menu>
 		} />
 	);
 }
