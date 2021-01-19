@@ -70,7 +70,7 @@ function Navigation(props) {
   const onSearch = () => console.log("Search");
 
   return (
-    <Menu mode="horizontal" theme="light" style={{ height: 64 }}>
+    <Menu mode="horizontal" theme="dark" style={{ height: 64 }}>
       <Menu.Item key="home" icon={<HomeOutlined />} style={{ float: "left" }}>
         <NavLink to="/" rel="noreferrer">
           Home

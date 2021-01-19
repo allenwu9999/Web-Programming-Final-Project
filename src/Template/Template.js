@@ -18,7 +18,7 @@ function Template(props) {
         style={{
           position: "fixed",
           width: "100%",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "#001529",
           height: 64,
           zIndex: 1,
         }}
@@ -36,7 +36,7 @@ function Template(props) {
         style={{
           padding: "0 50px",
           marginTop: 64,
-          background: "#E0E0E0",
+          background: "#FFFFFF",
         }}
       >
         <div style={{ padding: 24, minHeight: window.innerHeight - 128 }}>

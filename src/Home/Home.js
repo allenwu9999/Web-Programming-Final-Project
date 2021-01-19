@@ -19,9 +19,8 @@ function Home() {
 	const CarouselContentContainerStyle = {
 		height: Height,
 		color: '#000000',
-		// lineHeight: '160px',
 		// textAlign: 'center',
-		background: '#E0E0E0',
+		background: '#FFFFFF',
 		// float: 'right',
 		display: 'flex',
 		justifyContent: 'center',
@@ -74,7 +73,7 @@ function Home() {
 	const more_link = (
 		<Button type="primary" size="small">
 			<NavLink to="/sign-up" rel="noreferrer">
-				See More...
+				Show More...
 			</NavLink>
 		</Button>
 	);
@@ -198,7 +197,14 @@ function Home() {
 						{
 							popular_ideas.map(idea => (
 								<Col span={8}>
-									<Card title={idea.title} bordered={true}>
+									<Card title={idea.title} bordered={true}
+										headStyle={{
+											backgroundColor: main_color,
+											color: '#FFFFFF'
+										}}
+										hoverable
+										// loading
+									>
 										<div style={{height: '200px'}}>
 											{idea.content}
 										</div>
@@ -223,7 +229,7 @@ function Home() {
 									<List
 										size="large"
 										header={
-											<div style={{fontSize: '20px'}}>
+											<div style={{fontSize: '18px'}}>
 												<NavLink to="/topic"
 														rel="noreferrer"
 														style={{color: 'black'}}
@@ -245,6 +251,7 @@ function Home() {
 												</NavLink>
 											</List.Item>
 										}
+										// loading
 									/>
 								</Col>
 							))
