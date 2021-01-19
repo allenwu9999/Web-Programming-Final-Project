@@ -1,35 +1,36 @@
 import "antd/dist/antd.css";
 import React from "react";
-import { Form, Input, Button, Avatar, Row, Col } from "antd";
+import { Form, Input, Button, Avatar, Row, Col, Typography } from "antd";
 import Template from "../Template/Template";
 import { UserOutlined } from "@ant-design/icons";
 import "./SignIn.css";
 import FormItem from "antd/lib/form/FormItem";
-
+const { Title } = Typography;
 function SignIn() {
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
   };
   const Render = (
     <>
-      <div
-        style={{
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
-          paddingBottom: 50,
-          paddingTop: 50,
-        }}
-      >
-        <Avatar size={256} icon={<UserOutlined />} />
+      <div style={{ paddingTop: 30 }}>
+        <Title align="center">Ideas Republica</Title>
       </div>
       <div
         style={{
           alignItems: "center",
           display: "flex",
           justifyContent: "center",
+          paddingBottom: 50,
+          paddingTop: 5,
         }}
       >
+        <Avatar
+          size={256}
+          icon={<UserOutlined />}
+          style={{ backgroundColor: "#8fb2eb" }}
+        />
+      </div>
+      <div className="formInput">
         <Form onFinish={onFinish}>
           <Form.Item
             label="Username"
@@ -63,6 +64,9 @@ function SignIn() {
               </Button>
             </Col>
           </Row>
+          <div className="signup">
+            No accounts? <a href="./sign-up">Sign up here</a>
+          </div>
         </Form>
       </div>
     </>

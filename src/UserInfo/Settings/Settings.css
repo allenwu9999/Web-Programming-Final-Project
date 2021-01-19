@@ -1,0 +1,26 @@
+.title {
+  margin-left: 10%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.avatar {
+  margin-left: 10%;
+  float: left;
+  width: 150px;
+  height: 500px;
+}
+
+.content {
+  padding-left: 0%;
+  height: 300px;
+}
+
+.items {
+  font-size: large;
+}
+
+#modify-button {
+  padding-top: 30px;
+  margin-left: 23%;
+}
