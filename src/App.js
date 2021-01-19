@@ -15,6 +15,8 @@ import Settings from "./UserInfo/Settings/Settings";
 import MyIdeas from "./UserInfo/Ideas/MyIdeas";
 import MyProjects from "./UserInfo/Projects/MyProjects";
 import MyTopics from "./UserInfo/Topics/MyTopics";
+import Idea from "./Ideas/Idea";
+import Ideas from "./Ideas/Ideas";
 
 function App() {
   return (
@@ -33,6 +35,11 @@ function App() {
         <Route exact path="/my-ideas" component={MyIdeas} />
         <Route exact path="/my-interested-topics" component={MyTopics} />
         <Route exact path="/my-projects" component={MyProjects} />
+        <Route exact path="/topic" component={Home} />
+        <Route exact path="/subtopic" component={Home} />
+        <Route exact path="/ideas" component={Ideas} />
+        <Route exact path="/idea" component={Ideas} />
+        <Route path="/idea/:id?" component={Idea} />
 
         <Redirect from="/home" to="/" />
       </Switch>

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import Template from '../Template/Template';
 
 import { Carousel, Button } from 'antd';
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row, List } from 'antd';
 import { BulbTwoTone,
 		GlobalOutlined,
 		RocketTwoTone } from '@ant-design/icons';
@@ -56,12 +56,10 @@ function Home() {
 		> .slick-dots li button {
 			background: black;
 			opacity: 0.4;
-			z-index: auto;
 		}
 		> .slick-dots li.slick-active button {
 			background: black;
 			opacity: 0.9;
-			z-index: auto;
 		}
 	`;
 
@@ -69,6 +67,14 @@ function Home() {
 		<Button type="primary" size="large">
 			<NavLink to="/sign-up" rel="noreferrer">
 				Get Started
+			</NavLink>
+		</Button>
+	);
+
+	const more_link = (
+		<Button type="primary" size="small">
+			<NavLink to="/sign-up" rel="noreferrer">
+				See More...
 			</NavLink>
 		</Button>
 	);
@@ -88,6 +94,39 @@ function Home() {
 		}
 	]; // Top 3
 
+	const explore_topics = [
+		{
+			topic: 'Academic',
+			subtopic: [
+				'Math',
+				'Physics',
+				'Chemistry',
+				'Informatics',
+				'English'
+			]
+		},
+		{
+			topic: 'Sports',
+			subtopic: [
+				'Basketball',
+				'Baseball',
+				'Volleyball',
+				'Table tennis',
+				'Badminton'
+			]
+		},
+		{
+			topic: 'Music',
+			subtopic: [
+				'Piano',
+				'Violin',
+				'Oboe',
+				'Guitar',
+				'Drum'
+			]
+		}
+	]; // Top 3
+
 	return(
 		<Template content={
 			<Fragment>
@@ -97,6 +136,7 @@ function Home() {
 						pauseOnDotsHover
 						pauseOnFocus
 						swipeToSlide
+						dots={false}
 						effect='fade'>
 					<div>
 						<div style={CarouselPicContainerStyle}>
@@ -159,7 +199,12 @@ function Home() {
 							popular_ideas.map(idea => (
 								<Col span={8}>
 									<Card title={idea.title} bordered={true}>
-										{idea.content}
+										<div style={{height: '200px'}}>
+											{idea.content}
+										</div>
+										<div style={{float: 'right'}}>
+											{more_link}
+										</div>
 									</Card>
 								</Col>
 							))
@@ -169,15 +214,38 @@ function Home() {
 
 				<div style={{padding: '50px', height: Height}}>
 					<h1 style={{padding: '25px'}}>
-						Popular Ideas
+						Explore Topics
 					</h1>
 					<Row gutter={16}>
 						{
-							popular_ideas.map(idea => (
+							explore_topics.map(topic => (
 								<Col span={8}>
-									<Card title={idea.title} bordered={true}>
-										{idea.content}
-									</Card>
+									<List
+										size="large"
+										header={
+											<div style={{fontSize: '20px'}}>
+												<NavLink to="/topic"
+														rel="noreferrer"
+														style={{color: 'black'}}
+														activeStyle={{color: 'black'}}
+												>
+													{topic.topic}
+												</NavLink>
+											</div>
+										}
+										dataSource={topic.subtopic}
+										renderItem={item => 
+											<List.Item style={{fontSize: '15px'}}>
+												<NavLink to="/subtopic"
+														rel="noreferrer"
+														style={{color: 'black'}}
+														activeStyle={{color: 'black'}}
+												>
+													{item}
+												</NavLink>
+											</List.Item>
+										}
+									/>
 								</Col>
 							))
 						}
