@@ -36,16 +36,19 @@ function User(props) {
 	const user_ideas = [
 		{
 			id: '000',
+			creator: 'Dao@000',
 			title: 'Title1',
 			content: 'Content1'
 		},
 		{
 			id: '001',
+			creator: 'Dao@000',
 			title: 'Title2',
 			content: 'Content2'
 		},
 		{
 			id: '002',
+			creator: 'Dao@000',
 			title: 'Title3',
 			content: 'Content3'
 		}
@@ -54,16 +57,19 @@ function User(props) {
 	const user_projects = [
 		{
 			id: '003',
+			creator: 'Dao@000',
 			title: 'Prj1',
 			content: 'Content1'
 		},
 		{
 			id: '004',
+			creator: 'Dao@000',
 			title: 'Prj2',
 			content: 'Content2'
 		},
 		{
 			id: '005',
+			creator: 'Dao@000',
 			title: 'Prj3',
 			content: 'Content3'
 		}
@@ -72,16 +78,19 @@ function User(props) {
 	const user_reviews = [
 		{
 			id: '006',
+			creator: 'Dao@000',
 			title: 'Rv1',
 			content: 'Content1'
 		},
 		{
 			id: '007',
+			creator: 'Dao@000',
 			title: 'Rv2',
 			content: 'Content2'
 		},
 		{
 			id: '008',
+			creator: 'Dao@000',
 			title: 'Rv3',
 			content: 'Content3'
 		}
