@@ -1,0 +1,326 @@
+type Query{
+  # get_popular_topics(categories: [String!]): [Topic!]!  # for admin, if categories not specified, get an array containing all topics with descending scores
+  # get_category(topic_name: String!): String!
+  get_popular_topics: [Pop_Topics!]!
+  get_topics: [Topics!]!
+  get_explore_topics: [Pop_Topics!]!
+  get_popular_ideas: [Idea!]!
+  get_ideas_by_title(str: String!): [Idea!]!
+  get_idea_by_title(title: String!): [Idea!]!
+  get_ideas_by_topic(topic: String!): [Idea!]!
+  get_ideas_by_creator(creator: String!): [Idea!]!
+  get_ideas_by_acceptor(acceptor: String!): [Idea!]!
+  get_idea_by_id(ideaId: String!): [Idea!]!
+  get_ideas_by_published(published: Boolean!): [Idea!]!
+  get_user_by_realname(realname: String!): [User!]!
+  get_user_by_nickname(nickname: String!): [User!]!
+  get_user_by_id(userId: String!): [User!]!
+  get_user_by_email(email: String!): [User!]!
+  get_users_by_account_type(account_type: Int!): [User!]!
+  get_users_by_expertise(expertise: String!): [User!]!
+  get_users_by_login_state(login_state: Boolean!): [User!]!
+  get_user_ideas(userId: String!): [Idea!]!
+  get_user_ongoing_projects(userId: String!): [Idea!]!
+  get_user_ideas_to_be_reviewed(userId: String!): [Idea!]!
+  get_user_interested_topics(userId: String!): [Topic!]!
+  check_device_login(data: Check_device_login_input!): Boolean!
+}
+
+type Mutation{
+  create_topic(data: Create_topic_input!): Topic!    # for admin
+  delete_topic(topic_name: String): [Topic!]!        # for admin, if topic_name not specified, delete all topics
+  update_topic_score(data: Update_topic_score_input!): Topic!
+  add_topic_score_by_one(topic_name: String!): Topic!
+  # add_topic_reviewers(data: Add_topic_reviewers_input!): Topic!
+  # remove_topic_reviewers(data: Remove_topic_reviewers_input!): Topic!
+  create_idea(data: Create_idea_input!): Idea!
+  delete_idea_by_id(ideaId: String!): Idea!
+  update_idea_title(data: Update_idea_title_input!): Idea!
+  update_idea_content(data: Update_idea_content_input!): Idea!
+  add_idea_score_by_one(ideaId: String!): Idea!
+  add_idea_acceptor(data: Add_idea_acceptor_input!): Idea!
+  remove_idea_acceptor(data: Remove_idea_acceptor_input!): Idea!
+  add_idea_review_acceptor(data: Add_idea_review_acceptor_input!): Idea!
+  add_idea_review_rejector(data: Add_idea_review_rejector_input!): Idea!
+  remove_idea_review(data: Remove_idea_review_input!): Idea!
+  create_user(data: Create_user_input!): User!
+  delete_user_by_id(userId: String!): User!
+  update_user_account_type(data: Update_user_account_type_input!): User!
+  update_user_password_hashed(data: Update_user_password_hashed_input!): User!
+  update_user_email(data: Update_user_email_input!): User!
+  update_user_avatar(data: Update_user_avatar_input!): User!
+  update_user_region(data: Update_user_region_input!): User!
+  add_user_expertise(data: Add_user_expertise_input!): User!
+  remove_user_expertise(data: Remove_user_expertise_input!): User!
+  user_login(data: User_login_input!): Boolean!
+  user_logout(email: String!): Boolean!
+  add_user_interested_topic(data: Add_user_interested_topic_input!): User!
+  remove_user_interested_topic(data: Remove_user_interested_topic_input!): User!
+  # add_user_ongoing_project(data: Add_user_ongoing_project_input!): User!
+  # remove_user_ongoing_project(data: Remove_user_ongoing_project_input!): User!
+  add_user_device_key(data: Add_user_device_key_input!): User!
+  remove_user_device_key(data: Remove_user_device_key_input!): User!
+}
+
+type Subscription{
+  add_acceptor(creator_id: String!): Add_acceptor_subscription_payload!
+  remove_acceptor(creator_id: String!): Remove_acceptor_subscription_payload!
+  review(creator_id: String!): Review_subscription_payload!
+}
+
+type Add_acceptor_subscription_payload{
+  mutation: MutationType!
+  creator_id: String!
+  acceptor_id: String!
+}
+
+type Remove_acceptor_subscription_payload{
+  mutation: MutationType!
+  creator_id: String!
+  acceptor_id: String!
+}
+
+type Review_subscription_payload{
+  mutation: MutationType!
+  creator_id: String!
+  review_result: Boolean! # 0: rejected; 1: agreed
+}
+
+enum MutationType{
+  ADD_ACCEPTOR
+  REMOVE_ACCEPTOR
+  REVIEW
+}
+
+input info_input{
+  realname: String!
+  nickname: String!
+  password_hashed: String!
+  email: String!
+  avatar_content: String!
+  avatar_color: String!
+  region: String!
+  expertise: [String]!
+}
+
+input Create_user_input{
+  account_type: Int!
+  info: info_input!
+  login_state: Boolean!
+  ideas: [String]!
+  interested_topics: [String]!
+  ongoing_projects: [String]!
+  ideas_to_be_reviewed: [String]!
+  ideas_agreed: [String]!
+  ideas_rejected: [String]!
+  device_keys: [String]!
+}
+
+input Update_user_account_type_input{
+  userId: String!
+  account_type: Int!
+}
+
+input Update_user_password_hashed_input{
+  userId: String!
+  password_hashed: String!
+}
+
+input Update_user_email_input{
+  userId: String!
+  email: String!
+}
+
+input Update_user_avatar_input{
+  userId: String!
+  avatar_content: String!
+  avatar_color: String!
+}
+
+input Update_user_region_input{
+  userId: String!
+  region: String!
+}
+
+input Add_user_expertise_input{
+  userId: String!
+  expertise: String!
+}
+
+input Remove_user_expertise_input{
+  userId: String!
+  expertise: String!
+}
+
+input User_login_input{
+  email: String!
+  password_hashed: String!
+  uuid: String!
+}
+
+input Add_user_interested_topic_input{
+  userId: String!
+  interested_topic: String!
+}
+
+input Remove_user_interested_topic_input{
+  userId: String!
+  interested_topic: String!
+}
+
+input Add_user_ongoing_project_input{
+  userId: String!
+  ongoing_project: String!
+}
+
+input Remove_user_ongoing_project_input{
+  userId: String!
+  ongoing_project: String!
+}
+
+input Add_user_device_key_input{
+  userId: String!
+  device_key: String!
+}
+
+input Remove_user_device_key_input{
+  userId: String!
+  device_key: String!
+}
+
+input Check_device_login_input{
+  email: String!
+  device_key: String!
+}
+
+input Create_idea_input{
+  title: String!
+  topics: [String]!
+  content: String!
+  creator: String!
+  acceptors: [String]!
+  review_acceptors: [String]!
+  review_rejectors: [String]!
+  reviewed: Boolean!
+  published: Boolean!
+  reference: [String]!
+  reference_picture: String!
+  score: Int!
+}
+
+input Update_idea_title_input{
+  ideaId: String!
+  title: String!
+}
+
+input Update_idea_content_input{
+  ideaId: String!
+  content: String!
+}
+
+input Add_idea_acceptor_input{
+  ideaId: String!
+  acceptor: String!
+}
+
+input Remove_idea_acceptor_input{
+  ideaId: String!
+  acceptor: String!
+}
+
+input Add_idea_review_acceptor_input{
+  ideaId: String!
+  review_acceptor: String!
+}
+
+input Add_idea_review_rejector_input{
+  ideaId: String!
+  review_rejector: String!
+}
+
+input Remove_idea_review_input{
+  ideaId: String!
+  username: String!
+}
+
+input Create_topic_input{
+  topic_name: String!
+  category: String!
+  score: Float!
+  reviewers: [String]!
+}
+
+input Update_topic_score_input{
+  topic_name: String!
+  score: Float!
+}
+
+input Add_topic_reviewers_input{
+  topic_name: String!
+  reviewer: String!
+}
+
+input Remove_topic_reviewers_input{
+  topic_name: String!
+  reviewer: String!
+}
+
+type Info{
+  realname: String!
+  nickname: String!
+  password_hashed: String!
+  email: String!
+  avatar_content: String!
+  avatar_color: String!
+  region: String!
+  expertise: [String]!
+}
+
+type User{
+  _id: String!
+  account_type: Int!
+  info: Info!
+  login_state: Boolean!
+  ideas: [String]!
+  interested_topics: [String]!
+  ongoing_projects: [String]!
+  ideas_to_be_reviewed: [String]!
+  ideas_agreed: [String]!
+  ideas_rejected: [String]!
+  device_keys: [String]!
+}
+
+type Idea{
+  title: String!
+  topics: [String]!
+  content: String!
+  creator: String!
+  acceptors: [String]!
+  _id: String!
+  review_acceptors: [String]!
+  review_rejectors: [String]!
+  num_reviewers: Int!
+  reviewed: Boolean!
+  published: Boolean!
+  expire_time: String!
+  reference: [String]!
+  reference_picture: String!
+  score: Int!
+}
+
+type Topic{
+  topic_name: String!
+  category: String!
+  score: Float!
+  reviewers: [String]!
+}
+
+type Pop_Topics{
+  group: String!
+  items: [String]!
+}
+
+type Topics{
+  name: String!
+  subtopics: [String]!
+}

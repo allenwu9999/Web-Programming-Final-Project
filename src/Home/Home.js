@@ -1,20 +1,31 @@
 import 'antd/dist/antd.css';
-import React from 'react';
-import { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 import styled from 'styled-components';
 
 import Template from '../Template/Template';
+import IdeaCard from '../Template/IdeaCard';
+
+import Cookies from 'js-cookie';
 
 import { Carousel, Button } from 'antd';
-import { Card, Col, Row, List } from 'antd';
+import { Col, Row, List } from 'antd';
 import { BulbTwoTone,
 		GlobalOutlined,
 		RocketTwoTone } from '@ant-design/icons';
 
+import { useQuery } from '@apollo/react-hooks';
+import {
+  EXPLORE_TOPICS_QUERY,
+  POP_IDEAS_QUERY
+} from '../graphql';
+
 function Home() {
 	const Height = window.innerHeight - 114;
 	const main_color = '#1890FF';
+
+	const { loading, error, data, refetch, subscribeToMore } = useQuery(EXPLORE_TOPICS_QUERY)
+	const pop_ideas = useQuery(POP_IDEAS_QUERY)
 
 	const CarouselContentContainerStyle = {
 		height: Height,
@@ -70,61 +81,56 @@ function Home() {
 		</Button>
 	);
 
-	const more_link = (
-		<Button type="primary" size="small">
-			<NavLink to="/sign-up" rel="noreferrer">
-				Show More...
-			</NavLink>
-		</Button>
-	);
+	// const popular_ideas = [
+	// 	{
+	// 		id: '000',
+	// 		title: 'Title1',
+	// 		content: 'Content1'
+	// 	},
+	// 	{
+	// 		id: '001',
+	// 		title: 'Title2',
+	// 		content: 'Content2'
+	// 	},
+	// 	{
+	// 		id: '002',
+	// 		title: 'Title3',
+	// 		content: 'Content3'
+	// 	}
+	// ]; // Top 3
 
-	const popular_ideas = [
-		{
-			title: 'Title1',
-			content: 'Content1'
-		},
-		{
-			title: 'Title2',
-			content: 'Content2'
-		},
-		{
-			title: 'Title3',
-			content: 'Content3'
-		}
-	]; // Top 3
-
-	const explore_topics = [
-		{
-			topic: 'Academic',
-			subtopic: [
-				'Math',
-				'Physics',
-				'Chemistry',
-				'Informatics',
-				'English'
-			]
-		},
-		{
-			topic: 'Sports',
-			subtopic: [
-				'Basketball',
-				'Baseball',
-				'Volleyball',
-				'Table tennis',
-				'Badminton'
-			]
-		},
-		{
-			topic: 'Music',
-			subtopic: [
-				'Piano',
-				'Violin',
-				'Oboe',
-				'Guitar',
-				'Drum'
-			]
-		}
-	]; // Top 3
+	// const explore_topics = [
+	// 	{
+	// 		topic: 'Academic',
+	// 		subtopic: [
+	// 			'Math',
+	// 			'Physics',
+	// 			'Chemistry',
+	// 			'Informatics',
+	// 			'English'
+	// 		]
+	// 	},
+	// 	{
+	// 		topic: 'Sports',
+	// 		subtopic: [
+	// 			'Basketball',
+	// 			'Baseball',
+	// 			'Volleyball',
+	// 			'Table tennis',
+	// 			'Badminton'
+	// 		]
+	// 	},
+	// 	{
+	// 		topic: 'Music',
+	// 		subtopic: [
+	// 			'Piano',
+	// 			'Violin',
+	// 			'Oboe',
+	// 			'Guitar',
+	// 			'Drum'
+	// 		]
+	// 	}
+	// ]; // Top 3
 
 	return(
 		<Template content={
@@ -195,23 +201,11 @@ function Home() {
 					</h1>
 					<Row gutter={16}>
 						{
-							popular_ideas.map(idea => (
+							pop_ideas.loading ? (<p style={{ color: '#ccc' }}>Loading...</p>)
+         			: pop_ideas.error ? (<p style={{ color: '#ccc' }}>Error...</p>)
+         			: pop_ideas.data.get_popular_ideas.map(idea => (
 								<Col span={8}>
-									<Card title={idea.title} bordered={true}
-										headStyle={{
-											backgroundColor: main_color,
-											color: '#FFFFFF'
-										}}
-										hoverable
-										// loading
-									>
-										<div style={{height: '200px'}}>
-											{idea.content}
-										</div>
-										<div style={{float: 'right'}}>
-											{more_link}
-										</div>
-									</Card>
+									<IdeaCard idea={idea} />
 								</Col>
 							))
 						}
@@ -224,28 +218,22 @@ function Home() {
 					</h1>
 					<Row gutter={16}>
 						{
-							explore_topics.map(topic => (
+							loading ? (<p style={{ color: '#ccc' }}>Loading...</p>)
+         			: error ? (<p style={{ color: '#ccc' }}>Error...</p>)
+         			: data.get_explore_topics.map(topic => (
 								<Col span={8}>
 									<List
 										size="large"
 										header={
 											<div style={{fontSize: '18px'}}>
-												<NavLink to="/topic"
-														rel="noreferrer"
-														style={{color: 'black'}}
-														activeStyle={{color: 'black'}}
-												>
-													{topic.topic}
-												</NavLink>
+												{topic.group}
 											</div>
 										}
-										dataSource={topic.subtopic}
+										dataSource={topic.items}
 										renderItem={item => 
 											<List.Item style={{fontSize: '15px'}}>
-												<NavLink to="/subtopic"
+												<NavLink to={"/topics/" + item}
 														rel="noreferrer"
-														style={{color: 'black'}}
-														activeStyle={{color: 'black'}}
 												>
 													{item}
 												</NavLink>

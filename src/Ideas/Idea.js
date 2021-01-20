@@ -1,10 +1,10 @@
 import "antd/dist/antd.css";
-import React, { Fragment } from "react";
-import { NavLink, useHistory } from "react-router-dom";
+import React, { Fragment, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 import Template from '../Template/Template';
 
-import { Menu, List, Divider, Button, Popover, Tag } from "antd";
+import { Menu, Divider, Button, Popover, Tag, Image } from "antd";
 
 const { SubMenu } = Menu;
 
@@ -19,11 +19,60 @@ function Idea(props){
 		review_acceptors: ['Botan@446', 'Aqua@445'],
 		review_rejectors: ['wtf@001', 'hellyouspeaking@110'],
 		reviewed: true,
-		published: true
+		published: true,
+		pic: "https://img.moegirl.org.cn/common/0/0e/1498b4dda144ad348fbc4259d0a20cf430ad852d.gif",
+		href: ['https://img.moegirl.org.cn/common/0/0e/1498b4dda144ad348fbc4259d0a20cf430ad852d.gif']
 	};
 
 	const creator = target_idea.creator.split('@')[0];
-	const link_to_user = '/home';
+	const link_to_creator = '/user/' + target_idea.creator.split('@')[1];
+
+	const [ accepted, setAccepted ] = useState(false);
+
+	const sidebar_topics = [
+		{
+			title: 'Academic',
+			value: 'academic',
+			children: [
+				{
+					title: 'Physics',
+					value: 'physics'
+				},
+				{
+					title: 'Chemistry',
+					value: 'chemistry'
+				},
+				{
+					title: 'Informatics',
+					value: 'informatics'
+				}
+			]
+		},
+		{
+			title: 'Sports',
+			value: 'sports',
+			children: [
+				{
+					title: 'Baseball',
+					value: 'baseball'
+				},
+				{
+					title: 'Table tennis',
+					value: 'table tennis'
+				}
+			]
+		}
+	];
+
+	const Accept_button = (
+		<Button type="primary"
+				shape="round"
+				size='large'
+				onClick={() => setAccepted(!accepted)}
+				danger={ accepted ? true : false }>
+			{ accepted ? "Cancel" : "Accept" }
+		</Button>
+	);
 
 	return (
 		<Template content={
@@ -31,11 +80,26 @@ function Idea(props){
 				<div style={{display: 'flex'}}>
 					<div style={{float: 'left'}}>
 						<Menu mode="inline"
-								theme="dark"
-								style={{ width: 256 }}>
-							<Menu.Item key="home">
-								Home
-							</Menu.Item>
+								theme="light"
+								style={{ width: 256 }}
+								defaultOpenKeys={sidebar_topics.map(category => category.value)}>
+							{
+								sidebar_topics.map(category => (
+									<SubMenu key={category.value}
+											title={category.title}>
+										{
+											category.children.map(topic => (
+												<Menu.Item key={topic.value}>
+													<NavLink to="/topic"
+															rel="noreferrer">
+														{topic.title}
+													</NavLink>
+												</Menu.Item>
+											))
+										}
+									</SubMenu>
+								))
+							}
 						</Menu>
 					</div>
 					<div style={{
@@ -50,9 +114,9 @@ function Idea(props){
 									{target_idea.title}
 								</div>
 								<div style={{fontSize: '16px'}}>
-									From: {
+									Idea #{ <span>{id}</span> } From: {
 										<NavLink
-											to={link_to_user}
+											to={link_to_creator}
 											rel="noreferrer">
 											{creator}
 										</NavLink>
@@ -63,11 +127,7 @@ function Idea(props){
 								float: 'right',
 								padding: '12 24px',
 							}}>
-								<Button type="primary"
-										shape="round"
-										size='large'>
-									Accept
-								</Button>
+								{Accept_button}
 							</div>
 						</div>
 						<Divider />
@@ -79,6 +139,25 @@ function Idea(props){
 							}}>
 								<div>
 									{target_idea.content}
+								</div>
+								<Divider>
+									Reference Websites
+								</Divider>
+								{
+									target_idea.href.map(href => (
+										<a href={href}>{href}</a>
+									))
+								}
+								<Divider>
+									Reference Picture
+								</Divider>
+								<div style={{textAlign: 'center'}}>
+									<Image src={target_idea.pic} width={200} />
+									<p>
+										Link: <a href={target_idea.pic}>
+											{target_idea.pic}
+										</a>
+									</p>
 								</div>
 								<Divider />
 								{
@@ -95,11 +174,7 @@ function Idea(props){
 									))
 								}
 								<div style={{padding: '24px 0'}}>
-									<Button type="primary"
-											shape="round"
-											size='large'>
-										Accept
-									</Button>
+									{Accept_button}
 								</div>
 							</div>
 							<div style={{
@@ -116,7 +191,10 @@ function Idea(props){
 										target_idea.acceptors.map(acceptor => (
 											<Fragment>
 												<Menu.Item key={acceptor}>
-													<NavLink to='/home' rel="noreferrer">
+													<NavLink to={
+														'/user/'+acceptor.split('@')[1]
+														} 
+															rel="noreferrer">
 														{acceptor.split('@')[0]}
 													</NavLink>
 												</Menu.Item>
@@ -131,7 +209,9 @@ function Idea(props){
 										{
 											target_idea.review_acceptors.map(review => (
 												<p>
-													<NavLink to='/home'
+													<NavLink to={
+														'/user/' + review.split('@')[1]
+													}
 															rel="noreferrer">
 														{review.split('@')[0]}
 													</NavLink>
@@ -151,7 +231,9 @@ function Idea(props){
 										{
 											target_idea.review_rejectors.map(review => (
 												<p>
-													<NavLink to='/home'
+													<NavLink to={
+														'/user/' + review.split('@')[1]
+													}
 															rel="noreferrer">
 														{review.split('@')[0]}
 													</NavLink>
