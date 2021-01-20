@@ -1,6 +1,8 @@
 import "antd/dist/antd.css";
-import React, { Fragment } from "react";
-import { NavLink } from "react-router-dom";
+import React, { Fragment, useState, useEffect } from "react";
+import { NavLink, useHistory } from "react-router-dom";
+
+import Cookies from 'js-cookie';
 
 import "./SignUp.css";
 import Template from "../Template/Template";
@@ -11,18 +13,57 @@ import {
 	PlusOutlined
 } from "@ant-design/icons";
 
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
-  TOPICS_QUERY
+  TOPICS_QUERY,
+  CREATE_USER_MUTATION,
+  GET_USER_LOGGIN_BY_EMAIL
 } from '../graphql';
 
 const { Title } = Typography;
 const { TreeNode } = TreeSelect;
 
 function SignUp() {
+	let history = useHistory();
+	const [ create_user, {data} ] = useMutation(CREATE_USER_MUTATION);
+	const [ warning, setWarning ] = useState('');
+	const [ email, setEmail ] = useState('');
 
-	const onFinish = (values) => {
-		console.log("Received values of form: ", values);
+	const duplicate_email = useQuery(GET_USER_LOGGIN_BY_EMAIL, {
+		variables: { email: email }
+	});
+
+	const onFinish = async (values) => {
+		// console.log("Received values of form: ", values);
+		await duplicate_email.refetch();
+		if(duplicate_email.data.get_user_by_email.length){
+			setWarning("Email already exists!!!");
+			return;
+		}
+
+		await create_user({
+			variables: {
+				account_type: (values.expertise ? 1 : 2),
+				realname: values.realname,
+				nickname: values.nickname,
+				password_hashed: values.password,
+				email: values.email,
+				avatar_content: "User",
+				avatar_color: "#CCCCCC",
+				region: values.region,
+				expertise: (values.expertise ? values.expertise : []),
+				login_state: true,
+				ideas: [],
+				interested_topics: (values.expertise ? values.expertise : []),
+				ongoing_projects: [],
+				ideas_to_be_reviewed: [],
+				ideas_agreed: [],
+				ideas_rejected: [],
+				device_keys: []
+			}
+		});
+		Cookies.set('IdeaRep_user_email', email);
+		history.push('/my-settings');
 	};
 
 	const formItemLayout = {
@@ -36,9 +77,10 @@ function SignUp() {
 		}
 	};
 
-	const {
-		loading, error, data, refetch, subscribeToMore
-	} = useQuery(TOPICS_QUERY);
+	// const {
+	// 	loading, topics_query.error, data, refetch, subscribeToMore
+	// } = useQuery(TOPICS_QUERY);
+	const topics_query = useQuery(TOPICS_QUERY);
 
 	const Render = (
 		<Fragment>
@@ -52,6 +94,9 @@ function SignUp() {
 				<Title align="center" level={4}>
 					Sign up as a Citizen
 				</Title>
+			</div>
+			<div style={{color: 'red', textAlign: 'center'}}>
+				{warning}
 			</div>
 			<div className="content">
 				<Form {...formItemLayout} onFinish={onFinish}>
@@ -95,7 +140,8 @@ function SignUp() {
 							},
 						]}
 					>
-						<Input size="large" placeholder="Email" />
+						<Input size="large" placeholder="Email"
+							onChange={(e) => setEmail(e.target.value)}/>
 					</Form.Item>
 
 					<Form.Item
@@ -151,16 +197,16 @@ function SignUp() {
 																showSearch
 															>
 																{
-																	loading ? (
+																	topics_query.loading ? (
 																		<TreeNode value="loading..."
 																					title="loading..."
 																					key="loading..." disabled />
-																	) : error ? (
+																	) : topics_query.error ? (
 																		<TreeNode value="error..."
 																					title="error..."
 																					key="error..." disabled />
 																	) : (
-																		data.get_topics.map(category => (
+																		topics_query.data.get_topics.map(category => (
 																			<TreeNode value={category.name}
 																						title={category.name}
 																						key={category.name}

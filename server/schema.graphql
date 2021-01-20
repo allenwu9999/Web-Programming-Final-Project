@@ -19,10 +19,12 @@ type Query{
   get_users_by_account_type(account_type: Int!): [User!]!
   get_users_by_expertise(expertise: String!): [User!]!
   get_users_by_login_state(login_state: Boolean!): [User!]!
-  get_user_ideas(userId: String!): [Idea!]!
+  # get_user_ideas(userId: String!): [Idea!]!
+  get_user_ideas(email: String!): [Idea!]!
   get_user_ongoing_projects(userId: String!): [Idea!]!
   get_user_ideas_to_be_reviewed(userId: String!): [Idea!]!
   get_user_interested_topics(userId: String!): [Topic!]!
+  check_user_password(data: User_password_check_input!): Boolean!
   check_device_login(data: Check_device_login_input!): Boolean!
 }
 
@@ -50,6 +52,7 @@ type Mutation{
   update_user_email(data: Update_user_email_input!): User!
   update_user_avatar(data: Update_user_avatar_input!): User!
   update_user_region(data: Update_user_region_input!): User!
+  update_user_all(data: Update_user_all_input): User! # new line for addition
   add_user_expertise(data: Add_user_expertise_input!): User!
   remove_user_expertise(data: Remove_user_expertise_input!): User!
   user_login(data: User_login_input!): Boolean!
@@ -114,6 +117,19 @@ input Create_user_input{
   ideas_agreed: [String]!
   ideas_rejected: [String]!
   device_keys: [String]!
+}
+input Update_user_all_input {
+  userId: String!
+  realname: String!
+  region: String!
+  interested_topics: [String]!
+  old_password: String!
+  password_hashed: String!
+}
+
+input User_password_check_input {
+  email: String!
+  password_hashed: String!
 }
 
 input Update_user_account_type_input{

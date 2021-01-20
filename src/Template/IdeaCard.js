@@ -9,9 +9,11 @@ function IdeaCard(props) {
 	const idea = props.idea;
 	const show_creator = props.show_creator === undefined ? true : props.show_creator;
 
+	const id = (idea.id === undefined ? idea._id : idea.id);
+
 	const more_link = (
 		<Button type="primary" size="small">
-			<NavLink to={"/idea/" + idea.id} rel="noreferrer">
+			<NavLink to={"/idea/" + id} rel="noreferrer">
 				Show More...
 			</NavLink>
 		</Button>
@@ -32,7 +34,7 @@ function IdeaCard(props) {
 				color: '#FFFFFF'
 			}}
 			hoverable
-			onClick={() => history.push('/idea/'+idea.id)}
+			onClick={() => history.push('/idea/' + id)}
 		>
 			<div style={{height: '200px'}}>
 				{

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Template from '../Template/Template';
 import IdeaCard from '../Template/IdeaCard';
+import IdeaCardByID from '../Template/IdeaCardByID';
 
 import Cookies from 'js-cookie';
 
@@ -205,7 +206,7 @@ function Home() {
          			: pop_ideas.error ? (<p style={{ color: '#ccc' }}>Error...</p>)
          			: pop_ideas.data.get_popular_ideas.map(idea => (
 								<Col span={8}>
-									<IdeaCard idea={idea} />
+									<IdeaCardByID id={idea._id} />
 								</Col>
 							))
 						}

@@ -1,3 +1,6 @@
+import bcrypt from "bcrypt";
+const saltRounds = 11;
+
 const Query = {
   // async get_popular_topics(parent, args, { Topic }, info){
   //   let pop_topics = []
@@ -145,7 +148,8 @@ const Query = {
     return users
   },
   async get_user_ideas(parent, args, { User, Idea }, info){
-    let user = await User.find({ _id: args.userId })
+    // let user = await User.find({ _id: args.userId })
+    let user = await User.find({ "info.email": args.email })
     let ideas = user[0].ideas.map(async ideaId => {
       let idea = await Idea.find({ _id: ideaId })
       return idea[0]
@@ -175,6 +179,15 @@ const Query = {
       return topic[0]
     })
     return interested_topics
+  },
+  async check_user_password(parent, args, { User, Topic }, iofo) {
+    let user = await User.find({ "info.email": args.data.email });
+    const res = await bcrypt.compare(
+      args.data.password_hashed,
+      user[0].info.password_hashed
+    );
+    if (!user.length || !res) return false;
+    else return true;
   },
   async check_device_login(parent, args, { User, Topic }, info){
     let user = await User.find({ "info.email": args.data.email })

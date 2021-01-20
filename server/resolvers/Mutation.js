@@ -461,6 +461,26 @@ const Mutation = {
     let user = await User.find({ _id: args.data.userId })
     return user[0]
   },
+  async update_user_all(parent, args, { User, pubsub }, info) {
+    const newhash = await bcrypt.hash(args.data.password_hashed, saltRounds);
+    let user = await User.find({ _id: args.data.userId });
+    const res = await bcrypt.compare(
+      args.data.old_password,
+      user[0].info.password_hashed
+    );
+    if (!res) return false;
+    await User.updateMany(
+      { _id: args.data.userId },
+      {
+        "info.region": args.data.region,
+        "info.realname": args.data.realname,
+        "info.password_hashed": newhash,
+        interested_topics: args.data.interested_topics,
+      }
+    );
+    user = await User.find({ _id: args.data.userId });
+    return user[0];
+  },
   async add_user_expertise(parent, args, { User, Topic, pubsub }, info){
     let user = await User.find({ _id: args.data.userId })
     if(!user[0].info.expertise.includes(args.data.expertise)){

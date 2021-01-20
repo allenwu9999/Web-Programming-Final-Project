@@ -1,99 +1,40 @@
 import React, { Fragment } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
+import { useQuery } from '@apollo/react-hooks';
 
 import Template from "../../Template/Template";
-import IdeaCard from "../../Template/IdeaCard";
+import IdeaCardByID from "../../Template/IdeaCardByID";
 
-import { Avatar, Row, Col, Descriptions, Tag } from 'antd';
+import Cookies from 'js-cookie';
+
+import { Avatar, Row, Col, Descriptions, Tag, Empty } from 'antd';
+
+import {
+	GET_USER_BY_EMAIL,
+} from '../../graphql';
 
 function Homepage() {
+	const history = useHistory();
 	const Height = window.innerHeight - 114;
+	const email = Cookies.get('IdeaRep_user_email');
 
-	const user = {
-		_id: "000000",
-		account_type: 1,
-		info: {
-			realname: "Allen",
-			nickname: "Dao",
-			pwd: "not supported",
-			email: "b08901057@ntu.edu.tw",
-			avatar_content: "wtf",
-			avatar_color: "#00FF00",
-			region: "Taiwan",
-			expertise: ["chemistry", "informatics"],
-		},
-		login_state: true,
-		ideas: ["000", "111", "222"],
-		interested_topics: ["chemistry", "informatics"],
-		ongoing_projects: ["001", "110"],
-		ideas_to_be_reviewed: ["000", "111"],
-		ideas_agreed: ["011", "100"],
-		ideas_rejected: ["101", "010"],
-	};
-	const id = user._id;
+	const userdata = useQuery(GET_USER_BY_EMAIL, {
+		variables: { email: email }
+	});
 
-	const my_ideas = [
-		{
-			id: '000',
-			creator: "Dao@001",
-			title: 'Title1',
-			content: 'Content1'
-		},
-		{
-			id: '001',
-			creator: "Dao@001",
-			title: 'Title2',
-			content: 'Content2'
-		},
-		{
-			id: '002',
-			creator: "Dao@001",
-			title: 'Title3',
-			content: 'Content3'
-		}
-	];
+	if(userdata.loading)
+		return(<Template content="Loading" />);
+	if(userdata.error)
+		return(<Template content="Error" />);
+	if(!userdata.data)
+		return(<Template content="No data" />);
 
-	const my_projects = [
-		{
-			id: '003',
-			creator: "Dao@001",
-			title: 'Prj1',
-			content: 'Content1'
-		},
-		{
-			id: '004',
-			creator: "Dao@001",
-			title: 'Prj2',
-			content: 'Content2'
-		},
-		{
-			id: '005',
-			creator: "Dao@001",
-			title: 'Prj3',
-			content: 'Content3'
-		}
-	];
+	if(userdata.data.get_user_by_email[0] == undefined){
+		history.push('/sign-in');
+		return(<Template content="" />);
+	}
 
-	const my_reviews = [
-		{
-			id: '006',
-			creator: "Dao@001",
-			title: 'Rv1',
-			content: 'Content1'
-		},
-		{
-			id: '007',
-			creator: "Dao@001",
-			title: 'Rv2',
-			content: 'Content2'
-		},
-		{
-			id: '008',
-			creator: "Dao@001",
-			title: 'Rv3',
-			content: 'Content3'
-		}
-	];
+	const user = userdata.data.get_user_by_email[0];
 
 	const element = (path, title, target) => (
 		<div style={{
@@ -106,15 +47,25 @@ function Homepage() {
 					{title}
 				</NavLink>
 			</h1>
-			<Row gutter={16}>
-				{
-					target.map(idea => (
-						<Col span={8}>
-							<IdeaCard idea={idea} show_creator={false} />
+			{
+				target.length ? (
+					<Row gutter={[16, 16]}>
+						{
+							target.map(id => (
+								<Col span={8}>
+									<IdeaCardByID id={id} show_creator={false} />
+								</Col>
+							))
+						}
+					</Row>
+				) : (
+					<Row>
+						<Col span={8} offset={8}>
+							<Empty />
 						</Col>
-					))
-				}
-			</Row>
+					</Row>
+				)
+			}
 		</div>
 	);
 
@@ -136,7 +87,7 @@ function Homepage() {
 					</Avatar>
 					<div style={{ paddingBottom: 20 }}></div>
 					<div style={{ textAlign: "center" }}>
-						{user.info.nickname + "@" + id}
+						{user.info.nickname}
 					</div>
 					<div style={{
 						padding: '25px',
@@ -175,9 +126,9 @@ function Homepage() {
 						</Descriptions>
 					</div>
 				</div>
-				{element("/my-ideas", "My Ideas", my_ideas)}
-				{element("/my-projects", "My Projects", my_projects)}
-				{element("/my-reviews", "My Reviews", my_reviews)}
+				{element("/my-ideas", "My Ideas", user.ideas)}
+				{element("/my-projects", "My Projects", user.ongoing_projects)}
+				{element("/my-reviews", "My Reviews", [...user.ideas_agreed, ...user.ideas_rejected])}
 			</div>
 		</Fragment>
 	} />;

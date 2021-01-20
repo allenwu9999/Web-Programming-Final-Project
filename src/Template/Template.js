@@ -32,9 +32,10 @@ function Template(props) {
 	});
 	const [ user_logout, { data } ] = useMutation(USER_LOGOUT_MUTATION);
 
-	useEffect(() => {
+	useEffect(async () => {
 		// console.log(login.loading, login.error, login.data);
-		// console.log(Cookies.get('IdeaRep_uuid'));
+		// console.log(Cookies.get('IdeaRep_user_email'));
+		await login.refetch();
 		setLoggined(login.loading ? false : (
 				login.error ? false : (
 					login.data.get_user_by_email[0] ? (
@@ -62,7 +63,8 @@ function Template(props) {
 		if(logout){
 			setLoggined(false);
 			setReviewer(false);
-			Cookies.set('IdeaRep_user_email', undefined);
+			Cookies.remove('IdeaRep_user_email');
+			history.push('/home');
 		}
 		else
 			message.error('Logout failed');
